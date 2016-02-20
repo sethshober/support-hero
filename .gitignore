@@ -37,3 +37,6 @@ DS_Store
 
 # dotenv
 .env
+
+# bower components
+bower_components
