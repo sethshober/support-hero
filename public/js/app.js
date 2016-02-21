@@ -4,7 +4,7 @@ var supportHero = angular.module('supportHero', ['ui.router', 'ui.calendar'])
 
 // set up basic state machine
 supportHero.config(function($stateProvider, $urlRouterProvider) {
-  //$urlRouterProvider.otherwise('/')
+  $urlRouterProvider.otherwise('/')
     $stateProvider
       // home state and nested views
       .state('home', {
