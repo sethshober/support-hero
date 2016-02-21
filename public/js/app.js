@@ -19,22 +19,22 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
           // TODO: add error handler
 
           // test get user
-          $http.get("/person/test")
-          .then(function(res){
-            console.log(res.data)
-          })
+          // $http.get("/person/test")
+          // .then(function(res){
+          //   console.log(res.data)
+          // })
           
           // test get people
-          $http.get("people")
-          .then(function(res){
-            console.log(res.data)
-          })
+          // $http.get("/people")
+          // .then(function(res){
+          //   console.log(res.data)
+          // })
 
           // test create user
-          $http.post("person", {"username": "Bill Murray"})
-          .then(function(res) {
-            console.log(res.data)
-          })
+          // $http.post("/person", {"username": "Jim Carrey"})
+          // .then(function(res) {
+          //   console.log(res.data)
+          // })
 
           // test delete user
           // $http.delete("http://localhost:3000/person/test")

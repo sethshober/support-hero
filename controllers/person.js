@@ -24,12 +24,11 @@ router.get('/person/:username', function(req, res, next) {
 // create person
 router.post('/person', function(req, res, next) {
   console.log(req.body.username)
-  var person = Person({username: req.body.username})
-  person.save(function(err, person) {
-    if (err) return next(err)
-    console.log('saved ' + req.body.username)
-    res.json(person)
-    //res.sendStatus(201)
+  var person = new Person({username: req.body.username})
+  console.log(person)
+  person.save(function(err) {
+    if (err) console.log(err); return next(err)
+    res.sendStatus(201)
   })
 })
 
