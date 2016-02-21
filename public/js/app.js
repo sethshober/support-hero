@@ -19,16 +19,22 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
           // TODO: add error handler
 
           // test get user
-          // $http.get("http://localhost:3000/person/test")
-          // .then(function(res){
-          //   console.log(res.data)
-          // })
+          $http.get("/person/test")
+          .then(function(res){
+            console.log(res.data)
+          })
           
+          // test get people
+          $http.get("people")
+          .then(function(res){
+            console.log(res.data)
+          })
+
           // test create user
-          // $http.post("http://localhost:3000/person", {username: "Sandy Rivers", unavailable: []})
-          // .then(function(res) {
-          //   console.log(res.data)
-          // })
+          $http.post("person", {"username": "Bill Murray"})
+          .then(function(res) {
+            console.log(res.data)
+          })
 
           // test delete user
           // $http.delete("http://localhost:3000/person/test")
@@ -37,14 +43,28 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
           // })
 
           // test update availability
-          // $http.patch("http://localhost:3000/person/availability", {username: "test", unavailable: "2016-02-20"})
+          // $http.patch("http://localhost:3000/person/remove-availability", {username: "test", unavailable: "2016-02-21"})
           // .then(function(res){
           //   console.log(res.data)
           // })
 
+          // test remove availability
+          // $http.patch("http://localhost:3000/person/add-availability", {username: "test", unavailable: "2016-02-22"})
+          // .then(function(res){
+          //   console.log(res.data)
+          // })
+
+          // test get events
+          // $http.get('/events')
+          // .then(function(res) {
+          //   console.log(res.data)
+          // })
+
+
+
 
           // this is hacked / not the angular way
-          $http.get("http://localhost:3000/events")
+          $http.get("/events")
           .then(function(res) {
             $('#calendar').fullCalendar({
               header: {
@@ -52,10 +72,26 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
               },
-              defaultDate: '2014-11-12',
+              defaultDate: new Date(),
               editable: true,
               eventLimit: true, // allow "more" link when too many events
-              events: res.data
+              events: res.data,
+            
+              // can use to toggle available
+              dayClick: function(date, view) {
+                alert('Clicked on: ' + date.format())
+                alert('Current view: ' + view.name)
+                // change the day's background color just for fun
+                $(this).css('background-color', 'red')
+              },
+
+              eventClick: function(calEvent, jsEvent, view) {
+                alert('Event: ' + calEvent.title)
+                alert('View: ' + view.name)
+                // change the border color just for fun
+                $(this).css('border-color', 'red')
+              }
+
             })
           })
         } // end controller
