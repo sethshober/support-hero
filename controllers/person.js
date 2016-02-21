@@ -3,39 +3,62 @@ var Person = require('../models/person')
   , router = require('express').Router()
 
 
-// create new user
-router.post('/person', function(req, res, next) {
-  var person = new Person({
-    username: req.body.username,
-    unavailable: []
-  })
-  person.save(function(err) {
+// find person
+router.get('/person/:username', function(req, res, next) {
+  Person.findOne({username: req.params.username}, function(err, person){
     if(err) return next(err)
-    console.log('Person successfully created.')
+    console.log(person)
+    res.json(person)
+  })
+})
+
+// create person
+router.post('/person', function(req, res, next) {
+  console.log(req.body.username)
+  var person = Person({username: req.body.username})
+  person.save(function(res, err) {
+    if (err) return next(err)
+    console.log('saved' + req.body.username)
     res.sendStatus(201)
   })
 })
 
 
-// find person
-router.get('/person/:username', function(req, res, next) {
-  Person.findOne({username: req.params.username}, function(err, person){
-    if(err) return next(err)
-      console.log(person)
-      res.json(person)
+// update person
+router.put('/person', function(req, res, next){
+  console.log("Updating User" + req.body.username)
+  Person.findOneAndUpdate({username: req.body.username},
+    {$set: 
+      {
+        username: req.body.username,
+        unavailable: req.body.unavailable
+      }
+    },
+    {upsert: true},
+    function() {res.json(Person)}  
+  )
+})
+
+
+// update availability
+router.patch('/person/availability', function(req, res, next){
+  console.log("Updating User availability" + req.body.username)
+  Person.findOneAndUpdate(
+    {username: req.body.username},
+    { $push: { unavailable: req.body.unavailable } },
+    function() { res.json(Person) }
+  )
+})
+
+
+// delete person
+router.delete('/person/:username', function(req, res, next){
+  console.log("Deleting User" + req.params.username)
+  Person.remove({username: req.params.username}, function(res, err) {
+    if (err) return next(err)
+    console.log('successful delete')
+    res.sendStatus(201)
   })
 })
 
-// router.post('/person/:name'), function(req, res, next){
-//   var person = new Person({username: req.body.name, unavailable: []})
-//   bcrypt.hash(req.body.password, 10, function(err, hash){
-//     if(err) return next(err)
-//     user.password = hash
-//     user.save(function(err) {
-//       if(err) return next(err) {
-//         res.sendStatus(201)
-//       }
-//     })
-//   })
-// }
-
+module.exports = router

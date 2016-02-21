@@ -22,6 +22,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', routes)
+app.use(require('./controllers/person'))
+app.use(require('./controllers/events'))
 // app.use('/users', users)
 // app.use('/person/:username', function(req, res, next) {
 //   require('./controllers/person')

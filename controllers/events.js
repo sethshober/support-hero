@@ -1,13 +1,6 @@
-var express = require('express')
-var router = express.Router()
+router = require('express').Router()
 
-/* GET home page. */
-router.get('/', function(req, res) {
-  res.sendfile('./public/index.html')
-})
-
-router.get('/person', function(req, res) {
-    //var data = {name:"test"}
+router.get('/events', function(req, res) {
     var data = [
         {
           title: 'All Day Event',

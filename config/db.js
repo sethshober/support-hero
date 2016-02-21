@@ -5,10 +5,9 @@ var uriLocal = 'mongodb://localhost:27017/support-hero'
 
 mongoose.connect(uriLocal , function(){
   db.on('error', console.error.bind(console, 'connection error:')) 
- 
-    db.once('open', function(){
-        console.log("Successfully connected to support-hero MongoDB!")
-    })
+  db.once('open', function(){
+    console.log("Successfully connected to support-hero MongoDB!")
+  })
 })
 
 module.exports = mongoose
