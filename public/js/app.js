@@ -16,6 +16,25 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
         templateUrl: 'partials/partial-calendar.html',
         controller: function($scope, $http) {
 
+
+          function renderCal() {
+            $('#calendar').fullCalendar('rerenderEvents')
+          }
+
+          function colorUnavailableDays (events) {
+            console.log(events)
+            events[0].backgroundColor = 'lightblue'
+            // console.log('color days')
+            // console.log($scope.unavailable)
+            // for(var i = 0; i < events.length; i++) {
+            //   if ($scope.unavailable.indexOf(events[i].start[_i]) != -1) {
+            //     console.log('day match')
+            //     events[i].color = 'rgb(255, 192, 203)'
+            //   }
+            // }
+            renderCal()
+          }
+
           $http.get('/person/Sherry')
             .then(function(res) {
               $scope.user = res.data.username
@@ -121,10 +140,22 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
                 // alert('View: ' + view.name)
                 // change the border color just for fun
                 $(this).css('border-color', 'red')
-              }
+              },
 
+              dayRender: function (date, cell) {
+                console.log(cell)
+                if ($scope.unavailable.indexOf(date) != -1) {
+                  cell.css("background-color", "pink")
+                }
+              }
             })
+          }).then(function(){
+            var events = $('#calendar').fullCalendar('clientEvents')
+            colorUnavailableDays(events)
           })
+
+          
+
         } // end controller
       })
 })
