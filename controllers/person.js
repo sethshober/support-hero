@@ -50,7 +50,7 @@ router.put('/person', function(req, res, next){
 
 
 // update availability
-router.patch('/person/add-availability', function(req, res, next){
+router.patch('/person/add-unavailability', function(req, res, next){
   console.log("Updating User availability " + req.body.username)
   Person.findOneAndUpdate(
     {username: req.body.username},
@@ -61,7 +61,7 @@ router.patch('/person/add-availability', function(req, res, next){
 
 
 // remove availability
-router.patch('/person/remove-availability', function(req, res, next){
+router.patch('/person/remove-unavailability', function(req, res, next){
   console.log("Updating User availability " + req.body.username)
   Person.findOneAndUpdate(
     {username: req.body.username},

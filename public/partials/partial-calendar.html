@@ -2,7 +2,17 @@
 
 
 <!-- Apply the directive to your div elements. The calendar must be supplied an array of documented event sources to render itself: -->
-<div id="calendar"></div>
+<div id="container-main" class="row">
+  <div id="user-info" class="col-md-4">
+    <h2>{{user}}</h2>
+    <p>{{duty}}</p>
+    <p>{{workingDays}}</p>
+    <p>{{unavailable}}</p>
+  </div>
+  <div id="calendar" class="col-md-8"></div>
+</div>
+
+<!-- <div id="calendar"></div> -->
 
 <!-- Define your model in a scope e.g. -->
 <!-- $scope.eventSources = [] -->

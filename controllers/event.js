@@ -45,6 +45,36 @@ router.delete('/event/:username', function(req, res, next){
 })
 
 
+
+// update availability
+router.patch('/event/add-unavailability', function(req, res, next){
+  console.log("Updating event availability")
+  Event.findOneAndUpdate(
+    {start: req.body.start},
+    { $addToSet: { unavailable: req.body.username } },
+    function() { res.json(Event) }
+  )
+})
+
+
+// remove availability
+router.patch('/event/remove-unavailability', function(req, res, next){
+  console.log("Updating event availability")
+  Event.findOneAndUpdate(
+    {start: req.body.start},
+    { $pull: { unavailable: { $in: [ req.body.username ] } } },
+    function() { res.json(Event) }
+  )
+})
+
+
+
+
+
+
+
+
+
 // update an event
 
 

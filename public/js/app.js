@@ -15,7 +15,17 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
         url: '/calendar',
         templateUrl: 'partials/partial-calendar.html',
         controller: function($scope, $http) {
-          
+
+          $http.get('/person/Sherry')
+            .then(function(res) {
+              $scope.user = res.data.username
+              // TODO set on duty message
+              $scope.workingDays = res.data.workingDays
+              $scope.unavailable = res.data.unavailable
+              return res.data
+            })
+
+
           // TODO: add error handler
 
           // test get user
@@ -79,15 +89,36 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
             
               // can use to toggle available
               dayClick: function(date, view) {
-                alert('Clicked on: ' + date.format())
-                alert('Current view: ' + view.name)
-                // change the day's background color just for fun
-                $(this).css('background-color', 'red')
+                // alert('Clicked on: ' + date.format())
+                // alert('Current view: ' + view.name)
+                // mark day available
+                if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') {
+                  $(this).css('background-color', 'rgb(255, 192, 203)')
+                  $http.patch("/person/add-unavailability", {username: $scope.user, unavailable: date})
+                    .then(function(res){
+                    console.log(res.data)
+                  })
+                  $http.patch("/event/add-unavailability", {username: $scope.user, start: date})
+                    .then(function(res){
+                    console.log(res.data)
+                  })
+                // mark day unavailable    
+                } else {
+                  $(this).css('background-color', 'rgba(0, 0, 0, 0)')
+                  $http.patch("/person/remove-unavailability", {username: $scope.user, unavailable: date})
+                    .then(function(res){
+                    console.log(res.data)
+                  })
+                  $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
+                    .then(function(res){
+                    console.log(res.data)
+                  })
+                }
               },
 
               eventClick: function(calEvent, jsEvent, view) {
-                alert('Event: ' + calEvent.title)
-                alert('View: ' + view.name)
+                // alert('Event: ' + calEvent.title)
+                // alert('View: ' + view.name)
                 // change the border color just for fun
                 $(this).css('border-color', 'red')
               }

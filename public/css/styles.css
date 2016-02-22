@@ -1,0 +1,31 @@
+/* apply a natural box layout model to all elements,
+but allowing components to change */
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+/*body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}*/
+
+a {
+  color: #00B7FF;
+}
+
+#container-main {
+  margin: 4em auto;
+}
+
+#user-info {
+  border-radius: 2.50px;
+  border: 1.5px solid #333;
+}
+
+footer {
+  background: #ddd;
+  text-align: center;
+  color: #f9f9f9;
+}
