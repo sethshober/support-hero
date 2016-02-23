@@ -55,7 +55,7 @@ router.patch('/person/add-unavailability', function(req, res, next){
   Person.findOneAndUpdate(
     {username: req.body.username},
     { $addToSet: { unavailable: req.body.unavailable } },
-    function() { res.json(Person) }
+    function(person) { res.json(person) }
   )
 })
 
@@ -66,7 +66,7 @@ router.patch('/person/remove-unavailability', function(req, res, next){
   Person.findOneAndUpdate(
     {username: req.body.username},
     { $pull: { unavailable: { $in: [ req.body.unavailable ] } } },
-    function() { res.json(Person) }
+    function(person) { res.json(person) }
   )
 })
 
@@ -77,7 +77,7 @@ router.delete('/person/:username', function(req, res, next){
   Person.remove({username: req.params.username}, function(res, err) {
     if (err) return next(err)
     console.log('successful delete')
-    //res.sendStatus(201)
+    res.sendStatus(201)
   })
 })
 

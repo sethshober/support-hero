@@ -25,7 +25,7 @@ router.get('/events/:month', function(req, res, next) {
 // create event
 router.post('/event', function(req, res, next) {
   console.log(req.body.event)
-  var event = Event(req.body.event)
+  var event = new Event(req.body.event)
   event.save(function(err, event){
     if (err) return next(err)
     console.log('saved event')

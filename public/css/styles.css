@@ -11,21 +11,28 @@ html {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }*/
 
+footer {
+  background: #ddd;
+  text-align: center;
+  color: #f9f9f9;
+}
+
 a {
   color: #00B7FF;
+}
+
+input#availability {
+  margin-bottom: 0.5em;
 }
 
 #container-main {
   margin: 4em auto;
 }
 
-#user-info {
-  border-radius: 2.50px;
-  border: 1.5px solid #333;
+#user-info li {
+  list-style-type: none;
 }
 
-footer {
-  background: #ddd;
-  text-align: center;
-  color: #f9f9f9;
+li button.remove {
+  margin-right: 0.25em;
 }

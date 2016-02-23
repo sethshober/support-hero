@@ -2,14 +2,28 @@
 
 
 <!-- Apply the directive to your div elements. The calendar must be supplied an array of documented event sources to render itself: -->
+
+
+<div class="jumbotron text-center">
+    <h1>Welcome Support Heros!!</h1>
+    <h2>Today's hero is {{heroOnDuty}}</h2> 
+</div>
+
+
 <div id="container-main" class="row">
-  <div id="user-info" class="col-md-4">
+  <div id="user-info" class="col-md-3">
     <h2>{{user}}</h2>
     <p>{{duty}}</p>
-    <p>{{workingDays}}</p>
-    <p>{{unavailable}}</p>
+    <h3>Working Days:</h3>
+    <li ng-repeat="d in workingDays">{{d}}</li>
+    <h3>Unavailable Days:</h3>
+    <form>
+      <input id="availability" class="form-control" type="text" placeholder="add unavailable day" ng-model="unavailableDay">
+      <p class="text-muted"><button type="button" class="btn btn-default btn-sm" ng-click="addUnavailability(unavailableDay)">Add Day</button> format: yyyy-mm-dd</p>
+    </form>
+    <li ng-repeat="d in unavailable"><button type="button" class="btn btn-default btn-xs remove" ng-click="removeUnavailability($event);remove(unavailable, $index)">&#10005;</button> {{d}}</li>
   </div>
-  <div id="calendar" class="col-md-8"></div>
+  <div id="calendar" class="col-md-9"></div>
 </div>
 
 <!-- <div id="calendar"></div> -->
