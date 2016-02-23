@@ -1,4 +1,3 @@
-// get a person
 var Person = require('../models/person')
   , router = require('express').Router()
 

@@ -20,6 +20,9 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
 
 
 supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
+  
+  $scope.heroDate
+
   function renderCal() {
     $('#calendar').fullCalendar('rerenderEvents')
   }
@@ -46,6 +49,45 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
       $scope.unavailable = res.data.unavailable
       return res.data
     })
+
+  // find an available hero given a date
+  $scope.generateHero = function(date) {
+    console.log('generating hero')
+    console.log(date)
+    // date placeholder to test
+    // var date = '2016-02-10'
+    var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+    if (!r.test(date)) return
+    else {
+      $http.get('/people')
+        .then(function(res) {
+          var people = res.data
+            , notFound = true
+            , hero
+          while (notFound) {
+            var person = Math.floor(Math.random() * people.length)
+            console.log(person)
+            if (people[person].unavailable.indexOf(date) === -1) { // person IS available
+              notFound = false
+              hero = people[person].username
+              $scope.generatedHero = people[person].username
+              console.log(people[person].username)
+            } else console.log('no match going again')
+          }
+      }).then(function() {
+          // create calendar event
+          $('#calendar').fullCalendar('renderEvent',
+            {
+              title: $scope.generatedHero,
+              start: date
+            })
+          // TODO
+          // post to API
+          // check if current event via date
+          // remove/replace
+        })
+    }
+  }
 
 
   $scope.addUnavailability = function(day) {

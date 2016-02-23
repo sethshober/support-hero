@@ -16,12 +16,16 @@
     <p>{{duty}}</p>
     <h3>Working Days:</h3>
     <li ng-repeat="d in workingDays">{{d}}</li>
-    <h3>Unavailable Days:</h3>
+    <h3 style="display: inline-block">Unavailable Days:</h3>
     <form>
       <input id="availability" class="form-control" type="text" placeholder="add unavailable day" ng-model="unavailableDay">
       <p class="text-muted"><button type="button" class="btn btn-default btn-sm" ng-click="addUnavailability(unavailableDay)">Add Day</button> format: yyyy-mm-dd</p>
     </form>
     <li ng-repeat="d in unavailable"><button type="button" class="btn btn-default btn-xs remove" ng-click="removeUnavailability($event);remove(unavailable, $index)">&#10005;</button> {{d}}</li>
+    <h2>Generate Hero</h2>
+    <input class="form-control" placeholder="date" ng-model="heroDate">
+    <button type="button" class="btn btn-default btn-block" style="margin-top: 1em" ng-click="generateHero(heroDate)">Test Generate Hero</button>
+    <h3 ng-model="generatedHero">{{generatedHero}}</h3>
   </div>
   <div id="calendar" class="col-md-9"></div>
 </div>
