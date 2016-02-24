@@ -27,9 +27,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     $('#calendar').fullCalendar('rerenderEvents')
   }
 
-  function colorUnavailableDays (events) {
-    console.log(events)
-    events[0].backgroundColor = 'lightblue'
+  //function colorUnavailableDays (events) {
+    //console.log(events)
+    //events[0].backgroundColor = 'lightblue'
     // console.log('color days')
     // console.log($scope.unavailable)
     // for(var i = 0; i < events.length; i++) {
@@ -38,8 +38,8 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     //     events[i].color = 'rgb(255, 192, 203)'
     //   }
     // }
-    renderCal()
-  }
+    //renderCal()
+  //}
 
   $http.get('/person/Sherry')
     .then(function(res) {
@@ -51,13 +51,14 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     })
 
   // find an available hero given a date
+  // FIXME: will loop infinitely if every person has a day unavailable
   $scope.generateHero = function(date) {
     console.log('generating hero')
     console.log(date)
     // date placeholder to test
     // var date = '2016-02-10'
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
-    if (!r.test(date)) return
+    if (!r.test(date)) { console.log('not valid date'); return }
     else {
       $http.get('/people')
         .then(function(res) {
@@ -89,7 +90,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     }
   }
 
-
+  // TODO: add check for own day, and generate new hero
   $scope.addUnavailability = function(day) {
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
     if (r.test(day)) {
@@ -231,16 +232,17 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
       },
 
       dayRender: function (date, cell) {
-        console.log(cell)
+        //console.log(cell)
         if ($scope.unavailable.indexOf(date) != -1) {
           cell.css("background-color", "pink")
         }
       }
     })
-  }).then(function(){
-    var events = $('#calendar').fullCalendar('clientEvents')
-    colorUnavailableDays(events)
   })
+  // .then(function(){
+  //   var events = $('#calendar').fullCalendar('clientEvents')
+  //   colorUnavailableDays(events)
+  // })
 }]);
 
 // supportHero.controller('calendarCtrl', function($scope, $http) {

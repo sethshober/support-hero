@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 require('dotenv').config()
-var debug = require('debug')('support-hero')
-var app = require('../app')
-var db = require('../config/db')
+var nr = require('newrelic')
+  , debug = require('debug')('support-hero')
+  , app = require('../app')
+  , db = require('../config/db')
 
 app.set('port', process.env.PORT || 3000)
 

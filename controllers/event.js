@@ -70,18 +70,13 @@ router.patch('/event/remove-unavailability', function(req, res, next){
 
 
 
-
-
-
-
-
 // update an event
 
 
 // db.events.update(
-//    { month: "February" },
+//    { day: "04", month: "march" },
 //    {
-//       $set: {month: "february"}
+//       $set: {start: "2016-01-18"}
 //    },
 //    { upsert: true }
 // )
@@ -89,10 +84,10 @@ router.patch('/event/remove-unavailability', function(req, res, next){
 
 // db.events.insert({
 //   year: '2016',
-//   month: 'february',
-//   day: '16',
-//   title: 'Zoe',
-//   start: '2016-02-16',
+//   month: 'march',
+//   day: '28',
+//   title: "Jack",
+//   start: '2016-03-28',
 //   unavailable: []
 // })
 
