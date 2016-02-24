@@ -22,6 +22,16 @@ router.get('/events/:month', function(req, res, next) {
 })
 
 
+// get event day
+router.get('/event/:date', function(req, res, next) {
+  Event.find({start: req.params.date}, function(err, event){
+    if (err) return next(err)
+    console.log(event)
+    res.json(event)
+  })
+})
+
+
 // create event
 router.post('/event', function(req, res, next) {
   console.log(req.body.event)
@@ -40,7 +50,7 @@ router.delete('/event/:username', function(req, res, next){
   Person.remove({username: req.params.username}, function(res, err) {
     if (err) return next(err)
     console.log('successful delete')
-    //res.sendStatus(201)
+    res.sendStatus(201)
   })
 })
 
@@ -52,7 +62,7 @@ router.patch('/event/add-unavailability', function(req, res, next){
   Event.findOneAndUpdate(
     {start: req.body.start},
     { $addToSet: { unavailable: req.body.username } },
-    function() { res.json(Event) }
+    function(event) { res.json(event) }
   )
 })
 
@@ -63,11 +73,20 @@ router.patch('/event/remove-unavailability', function(req, res, next){
   Event.findOneAndUpdate(
     {start: req.body.start},
     { $pull: { unavailable: { $in: [ req.body.username ] } } },
-    function() { res.json(Event) }
+    function(event) { res.json(event) }
   )
 })
 
 
+// update event title
+router.patch('/event/update/title', function(req, res, next){
+  console.log("updating event title")
+  Event.findOneAndUpdate(
+    {start: req.body.start},
+    { $set: { title: req.body.title } },
+    function(event) { res.json(event) }
+  )
+})
 
 
 // update an event

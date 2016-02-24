@@ -21,6 +21,10 @@ a {
   color: #00B7FF;
 }
 
+#username {
+  border-bottom: 1.75px solid black;
+}
+
 input#availability {
   margin-bottom: 0.5em;
 }
@@ -35,4 +39,12 @@ input#availability {
 
 li button.remove {
   margin-right: 0.25em;
+}
+
+#add-hero-input {
+  margin-bottom: 0.25em;
+}
+
+#notes {
+  margin-top: 2em;
 }

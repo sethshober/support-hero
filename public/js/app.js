@@ -27,19 +27,24 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     $('#calendar').fullCalendar('rerenderEvents')
   }
 
-  //function colorUnavailableDays (events) {
-    //console.log(events)
-    //events[0].backgroundColor = 'lightblue'
-    // console.log('color days')
-    // console.log($scope.unavailable)
-    // for(var i = 0; i < events.length; i++) {
-    //   if ($scope.unavailable.indexOf(events[i].start[_i]) != -1) {
-    //     console.log('day match')
-    //     events[i].color = 'rgb(255, 192, 203)'
-    //   }
-    // }
-    //renderCal()
-  //}
+  function colorOnDutyDays(events) {
+    console.log('color days')
+    for(var i = 0; i < events.length; i++) {
+      if (events[i].title === $scope.user) {
+        console.log('day match')
+        events[i].color = '#98FB98'
+      }
+    }
+  }
+
+  function listOnDutyDays(events) {
+    $scope.onDutyDays = []
+    for(var i = 0; i < events.length; i++) {
+      if (events[i].title === $scope.user) {
+        $scope.onDutyDays.push(events[i].start.format('YYYY-MM-DD'))
+      }
+    }
+  }
 
   $http.get('/person/Sherry')
     .then(function(res) {
@@ -47,18 +52,18 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
       // TODO set on duty message
       $scope.workingDays = res.data.workingDays
       $scope.unavailable = res.data.unavailable
-      return res.data
     })
 
+
+
   // find an available hero given a date
-  // FIXME: will loop infinitely if every person has a day unavailable
   $scope.generateHero = function(date) {
     console.log('generating hero')
     console.log(date)
     // date placeholder to test
     // var date = '2016-02-10'
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
-    if (!r.test(date)) { console.log('not valid date'); return }
+    if (!r.test(date)) return
     else {
       $http.get('/people')
         .then(function(res) {
@@ -89,6 +94,104 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
         })
     }
   }
+
+
+  // continuation of above
+  // find an available hero given a date
+  // FIXME: will loop infinitely if every person has a day unavailable
+  // $scope.generateHero = function(date) {
+
+  //   console.log('generating hero for ' + date)
+
+  //   // create calendar event
+  //   function addHeroToCalendar(hero) {
+  //     console.log($scope.generatedHero)
+  //     $('#calendar').fullCalendar('renderEvent',
+  //       {
+  //         title: hero,
+  //         start: date
+  //       })
+  //   }
+
+  //   // remove current hero on duty
+  //   function updateEvent() {
+  //     $http.patch('/event/update/title', {start: date, title: $scope.generatedHero})
+  //       .then(function(res) {
+  //         console.log(res.data)
+  //       })
+  //   }
+
+  //   // post event to API
+  //   function postEvent() {
+  //     var month
+  //       , monthNames
+  //       , postEvent
+      
+  //     monthNames = ["january", "february", "march", "april", "may", "june",
+  //     "july", "august", "september", "october", "november", "december"
+  //     ]
+
+  //     if(date.slice(5,6) === 0) month = monthNames[date.slice(6,7) - 1]
+  //     else month = date.slice(5,7)
+      
+  //     postEvent = {
+  //       year: date.slice(0,4),
+  //       month: month,
+  //       day: date.slice(-2),
+  //       title: $scope.generatedHero,
+  //       start: date
+  //     }
+
+  //     $http.post('/event', {event: postEvent})
+  //       .then(function(res) {
+  //         console.log(res)
+  //       })
+  //   }
+
+  //   function findHero() {
+  //     $http.get('/people')
+  //     .then(function(res) {
+  //       var people = res.data
+  //         , notFound = true
+  //         , hero
+  //       // add stopgap for if nobody is available
+  //       while (notFound) {
+  //         var person = Math.floor(Math.random() * people.length)
+  //         console.log(person)
+  //         if (people[person].unavailable.indexOf(date) === -1) { // person IS available
+  //           notFound = false
+  //           hero = people[person].username
+  //           $scope.generatedHero = hero
+  //           console.log(people[person].username)
+  //         } else console.log('no match going again')
+  //       }
+  //       return hero
+  //     })
+  //   }
+
+  //   // date placeholder to test
+  //   // var date = '2016-02-10'
+  //   var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+  //   if (!r.test(date)) { 
+  //     console.log('not valid date')
+  //     return
+  //   } else {
+  //     // create new hero duty or swap if already one
+  //     // only accounts for one event per day (grabs first one)
+  //     $http.get('/event/' + date)
+  //       .then(function(res) {
+  //         if(res.data.length == 0) { // no event/hero assigned
+  //           addHeroToCalendar(findHero())
+  //           postEvent()
+  //         } else { // swap duty
+  //           addHeroToCalendar($scope.user)
+  //           updateEvent()
+  //         }
+  //       })
+  //     }
+  // } // end generateHero
+
+
 
   // TODO: add check for own day, and generate new hero
   $scope.addUnavailability = function(day) {
@@ -131,6 +234,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
   }
 
   // TODO: add error handler
+
 
   // test get user
   // $http.get("/person/test")
@@ -175,7 +279,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
   // })
 
 
-
+  $
 
   // this is hacked / not the angular way
   $http.get("/events")
@@ -197,11 +301,12 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
         // alert('Current view: ' + view.name)
         // mark day available
         if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') {
-          $(this).css('background-color', 'rgb(255, 192, 203)')
+          $(this).css('background-color', '#FFE4E1')
           $http.patch("/person/add-unavailability", {username: $scope.user, unavailable: date})
             .then(function(res){
             console.log(res.data)
-            $scope.unavailable.push(date)
+            console.log(date)
+            $scope.unavailable.push(date.format('YYYY-MM-DD'))
             console.log($scope.unavailable)
           })
           $http.patch("/event/add-unavailability", {username: $scope.user, start: date})
@@ -224,50 +329,35 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
         }
       },
 
+      // do something when clicking an event
+      // like a small pop up maybe?
       eventClick: function(calEvent, jsEvent, view) {
         // alert('Event: ' + calEvent.title)
         // alert('View: ' + view.name)
         // change the border color just for fun
-        $(this).css('border-color', 'red')
+        // $(this).css('border-color', 'red')
       },
 
       dayRender: function (date, cell) {
-        //console.log(cell)
+        console.log(cell)
+        date = moment(date).format('YYYY-MM-DD')
+        //console.log('day render ' + moment(new Date(date)).format('YYYY-MM-DD'))
         if ($scope.unavailable.indexOf(date) != -1) {
-          cell.css("background-color", "pink")
+          cell.css("background-color", "#FFE4E1")
         }
       }
     })
   })
-  // .then(function(){
-  //   var events = $('#calendar').fullCalendar('clientEvents')
-  //   colorUnavailableDays(events)
-  // })
-}]);
-
-// supportHero.controller('calendarCtrl', function($scope, $http) {
-//     $http.get("http://localhost:3000/person")
-//     .then(function(response) {
-//         console.log(response.data)
-//         //$scope.myWelcome = response.data;
-//     });
-// });
-
-// TODO: move controller to separate folder
-// supportHero.controller('calendarCtrl', function($scope) {
-//     /* config object */
-//     $scope.uiConfig = {
-//       calendar:{
-//         height: 450,
-//         editable: true,
-//         header:{
-//           left: 'month basicWeek basicDay agendaWeek agendaDay',
-//           center: 'title',
-//           right: 'today prev,next'
-//         },
-//         dayClick: $scope.alertEventOnClick,
-//         eventDrop: $scope.alertOnDrop,
-//         eventResize: $scope.alertOnResize
-//       }
-//     }
-// })
+  .then(function(){
+    var events = $('#calendar').fullCalendar('clientEvents')
+    colorOnDutyDays(events)
+    listOnDutyDays(events)
+    renderCal()
+    // set current hero
+    var d = $('#calendar').fullCalendar('getDate').format('YYYY-MM-DD')
+    $http.get('/event/' + d)
+      .then(function(res) {
+        $scope.currentHero = res.data[0].title
+      })
+  })
+}])
