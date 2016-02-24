@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "test": "node_modules/.bin/mocha -w"
   },
   "dependencies": {
     "body-parser": "~1.0.0",
@@ -22,6 +23,8 @@
     "gulp-bower": "0.0.13",
     "gulp-concat": "^2.6.0",
     "gulp-nodemon": "^2.0.6",
-    "main-bower-files": "^2.11.1"
+    "main-bower-files": "^2.11.1",
+    "mocha": "^2.4.5",
+    "should": "^8.2.2"
   }
 }

@@ -4,13 +4,14 @@ var supportHero = angular.module('supportHero', ['ui.router'])
 
 // set up basic state machine
 supportHero.config(function($stateProvider, $urlRouterProvider) {
-  $urlRouterProvider.otherwise('/')
+  $urlRouterProvider.otherwise('/calendar')
   $stateProvider
     // home state and nested views
-    .state('home', {
-      url: '/',
-      templateUrl: 'partials/partial-home.html'
-    })
+    // .state('home', {
+    //   url: '/',
+    //   templateUrl: 'partials/partial-home.html'
+    // })
+
     .state('calendar', {
       url: '/calendar',
       templateUrl: 'partials/partial-calendar.html',
@@ -21,22 +22,25 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
 
 supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
   
+  // TODO: add error handlers
+
   $scope.heroDate
 
+  // update calendar events
   function renderCal() {
     $('#calendar').fullCalendar('rerenderEvents')
   }
 
+  // change event color for days user is on duty
   function colorOnDutyDays(events) {
-    console.log('color days')
     for(var i = 0; i < events.length; i++) {
       if (events[i].title === $scope.user) {
-        console.log('day match')
         events[i].color = '#98FB98'
       }
     }
   }
 
+  // list on duty days in sidebar
   function listOnDutyDays(events) {
     $scope.onDutyDays = []
     for(var i = 0; i < events.length; i++) {
@@ -46,6 +50,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     }
   }
 
+  // get our default user Sherry
+  // this should probably be a service
+  // and in reality user session token would be passed in header
   $http.get('/person/Sherry')
     .then(function(res) {
       $scope.user = res.data.username
@@ -65,11 +72,13 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
     if (!r.test(date)) return
     else {
+      // get all the people
       $http.get('/people')
         .then(function(res) {
           var people = res.data
             , notFound = true
             , hero
+          // pick a random one
           while (notFound) {
             var person = Math.floor(Math.random() * people.length)
             console.log(person)
@@ -90,13 +99,13 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
           // TODO
           // post to API
           // check if current event via date
-          // remove/replace
+          // remove/replace/swap
         })
     }
   }
 
 
-  // continuation of above
+  // Continuation of above. I know this is close. And it will allow the swap feature.
   // find an available hero given a date
   // FIXME: will loop infinitely if every person has a day unavailable
   // $scope.generateHero = function(date) {
@@ -227,61 +236,12 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
 
   // remove list item (unavailable)
   $scope.remove = function(array, index){
-    console.log(index)
-    console.log(array)
     array.splice(index, 1)
-    console.log(array)
   }
 
-  // TODO: add error handler
 
-
-  // test get user
-  // $http.get("/person/test")
-  // .then(function(res){
-  //   console.log(res.data)
-  // })
-  
-  // test get people
-  // $http.get("/people")
-  // .then(function(res){
-  //   console.log(res.data)
-  // })
-
-  // test create user
-  // $http.post("/person", {"username": "Jim Carrey"})
-  // .then(function(res) {
-  //   console.log(res.data)
-  // })
-
-  // test delete user
-  // $http.delete("http://localhost:3000/person/test")
-  // .then(function(res){
-  //   console.log(res.data)
-  // })
-
-  // test update availability
-  // $http.patch("http://localhost:3000/person/remove-availability", {username: "test", unavailable: "2016-02-21"})
-  // .then(function(res){
-  //   console.log(res.data)
-  // })
-
-  // test remove availability
-  // $http.patch("http://localhost:3000/person/add-availability", {username: "test", unavailable: "2016-02-22"})
-  // .then(function(res){
-  //   console.log(res.data)
-  // })
-
-  // test get events
-  // $http.get('/events')
-  // .then(function(res) {
-  //   console.log(res.data)
-  // })
-
-
-  $
-
-  // this is hacked / not the angular way
+  // we should be more efficient in grabbing events
+  // would be best to grab per view ex. month
   $http.get("/events")
   .then(function(res) {
     $('#calendar').fullCalendar({
@@ -295,19 +255,17 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
       eventLimit: true, // allow "more" link when too many events
       events: res.data,
     
-      // can use to toggle available
+      // toggle availability
       dayClick: function(date, view) {
         // alert('Clicked on: ' + date.format())
         // alert('Current view: ' + view.name)
+        
         // mark day available
-        if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') {
-          $(this).css('background-color', '#FFE4E1')
+        if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') { // normal
+          $(this).css('background-color', '#FFE4E1') // make Misty Rose
           $http.patch("/person/add-unavailability", {username: $scope.user, unavailable: date})
             .then(function(res){
-            console.log(res.data)
-            console.log(date)
             $scope.unavailable.push(date.format('YYYY-MM-DD'))
-            console.log($scope.unavailable)
           })
           $http.patch("/event/add-unavailability", {username: $scope.user, start: date})
             .then(function(res){
@@ -318,9 +276,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
           $(this).css('background-color', 'rgba(0, 0, 0, 0)')
           $http.patch("/person/remove-unavailability", {username: $scope.user, unavailable: date})
             .then(function(res){
-            console.log(res.data)
             $scope.unavailable.splice(date, 1)
-            console.log($scope.unavailable)
           })
           $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
             .then(function(res){
@@ -338,10 +294,11 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
         // $(this).css('border-color', 'red')
       },
 
+      // do something on each day
+      // in this case color unavailable days
+      // there is an inconsistent bug here on load
       dayRender: function (date, cell) {
-        console.log(cell)
         date = moment(date).format('YYYY-MM-DD')
-        //console.log('day render ' + moment(new Date(date)).format('YYYY-MM-DD'))
         if ($scope.unavailable.indexOf(date) != -1) {
           cell.css("background-color", "#FFE4E1")
         }

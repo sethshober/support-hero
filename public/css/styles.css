@@ -1,15 +1,9 @@
-/* apply a natural box layout model to all elements,
-but allowing components to change */
 html {
   box-sizing: border-box;
 }
 *, *:before, *:after {
   box-sizing: inherit;
 }
-
-/*body {
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}*/
 
 footer {
   background: #ddd;
@@ -43,6 +37,10 @@ li button.remove {
 
 #add-hero-input {
   margin-bottom: 0.25em;
+}
+
+#generate-hero {
+  margin-top: 1em;
 }
 
 #notes {

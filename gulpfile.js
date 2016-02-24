@@ -9,6 +9,8 @@ var config = {
   bowerPath: 'bower_components'
 }
 
+
+// FIX ME
 // gulp.task('js', function(){
 //     gulp.src(['public/js/ng/controllers/module.js', config.jsPath])
 //         .pipe(concat('app.js'))
@@ -20,6 +22,8 @@ var config = {
 // gulp.task('watch:js', ['js'], function(){
 //     gulp.watch(config.jsPath, ['js'])
 // })
+
+// TODO: Add live reload.
 
 gulp.task('bower', function() {
   gulp.src(mainBowerFiles(), { base: config.bowerPath })

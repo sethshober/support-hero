@@ -1,15 +1,7 @@
-<!-- <div ui-calendar="uiConfig.calendar" class="span8 calendar" ng-model="eventSources" ng-controller="calendarCtrl"></div> -->
-
-
-<!-- Apply the directive to your div elements. The calendar must be supplied an array of documented event sources to render itself: -->
-
-
 <div class="jumbotron text-center">
     <h1>Welcome Support Heros!!</h1>
     <h2 ng-model="currentHero">Today's hero is {{currentHero}}.</h2> 
 </div>
-
-
 <div id="container-main" class="row">
   <div id="user-info" class="col-md-3">
     <h2 id="username">{{user}}</h2>
@@ -26,7 +18,7 @@
     <input id="add-hero-input" class="form-control" placeholder="add date" ng-model="heroDate">
     <p class="text-muted">format: yyyy-mm-dd</p>
     <!-- <p class="text-muted">This will create a swap if a hero is already scheduled.</p> -->
-    <button type="button" class="btn btn-default btn-block" style="margin-top: 1em" ng-click="generateHero(heroDate)">Generate Hero</button>
+    <button id="generate-hero" type="button" class="btn btn-default btn-block" ng-click="generateHero(heroDate)">Generate Hero</button>
     <h3 ng-model="generatedHero">{{generatedHero}}</h3>
     <h3>Working Days:</h3>
     <li ng-repeat="d in workingDays">{{d}}</li>
@@ -39,8 +31,3 @@
     <ul>
   </div>
 </div>
-
-<!-- <div id="calendar"></div> -->
-
-<!-- Define your model in a scope e.g. -->
-<!-- $scope.eventSources = [] -->
