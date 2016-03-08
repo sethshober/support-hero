@@ -1,3 +1,5 @@
+'use strict'
+
 /* 
  * Please note that to get this done in the timeline, 
  * with my minimal nG experience, I had to make some hacks.
@@ -40,9 +42,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
 
   // change event color for days user is on duty
   function colorOnDutyDays(events) {
-    for(var i = 0; i < events.length; i++) {
-      if (events[i].title === $scope.user) {
-        events[i].color = '#98FB98'
+    for(let evt of events) {
+      if (evt.title === $scope.user) {
+        evt.color = '#98FB98'
       }
     }
   }
@@ -50,9 +52,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
   // list on duty days in sidebar
   function listOnDutyDays(events) {
     $scope.onDutyDays = []
-    for(var i = 0; i < events.length; i++) {
-      if (events[i].title === $scope.user) {
-        $scope.onDutyDays.push(events[i].start.format('YYYY-MM-DD'))
+    for(let evt of events) {
+      if (evt.title === $scope.user) {
+        $scope.onDutyDays.push(evt.start.format('YYYY-MM-DD'))
       }
     }
   }
