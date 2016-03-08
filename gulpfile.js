@@ -1,12 +1,12 @@
+// this is mostly for future use
+
 var gulp           = require('gulp')
   , concat         = require('gulp-concat')
   , nodemon        = require('gulp-nodemon')
-  , bower          = require('gulp-bower')
   , mainBowerFiles = require('main-bower-files')
 
 var config = {
-  jsPath: 'public/js/*.js',
-  bowerPath: 'bower_components'
+  jsPath: 'public/js/*.js'
 }
 
 
@@ -25,10 +25,6 @@ var config = {
 
 // TODO: Add live reload.
 
-gulp.task('bower', function() {
-  gulp.src(mainBowerFiles(), { base: config.bowerPath })
-    .pipe(gulp.dest('public/js/lib'))
-})
 
 gulp.task('dev:server', function(){
     nodemon({
@@ -38,4 +34,4 @@ gulp.task('dev:server', function(){
     })
 })
 
-gulp.task('default',['bower', 'dev:server'],  function(){})
+gulp.task('default',['dev:server'],  function(){})
