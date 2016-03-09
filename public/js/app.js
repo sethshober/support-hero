@@ -29,8 +29,21 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
 })
 
 
-supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
-  
+
+
+supportHero.service('peopleSvc', function ($http) {
+  this.getPeople = function() {
+    $http.get('/people')
+    .then(function(res){
+      console.log('people service ', res)
+      return res
+    })
+  }
+})
+
+
+supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($scope, $http, peopleSvc){
+
   // TODO: add error handlers
 
   $scope.heroDate
@@ -82,7 +95,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", function($scope, $http){
     if (!r.test(date)) return
     else {
       // get all the people
-      $http.get('/people')
+      peopleSvc.getPeople()
         .then(function(res) {
           var people = res.data
             , notFound = true
