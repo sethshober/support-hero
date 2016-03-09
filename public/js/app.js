@@ -29,20 +29,34 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
 })
 
 
-
-
 supportHero.service('peopleSvc', function ($http) {
   this.getPeople = function() {
-    $http.get('/people')
+    return $http.get('/people')
     .then(function(res){
-      console.log('people service ', res)
-      return res
+      return res.data
+    })
+  }
+
+  this.getPerson = function(user) {
+    return $http.get('/person/' + user)
+    .then(function(res){
+      return res.data
     })
   }
 })
 
 
-supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($scope, $http, peopleSvc){
+supportHero.service('eventSvc', function ($http) {
+  this.getEvents = function() {
+    return $http.get('/events')
+    .then(function(res){
+      return res.data
+    })
+  }
+})
+
+
+supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', function($scope, $http, peopleSvc, eventSvc){
 
   // TODO: add error handlers
 
@@ -75,12 +89,12 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($sc
   // get our default user Sherry
   // this should probably be a service
   // and in reality user session token would be passed in header
-  $http.get('/person/Sherry')
-    .then(function(res) {
-      $scope.user = res.data.username
+  peopleSvc.getPerson('Sherry')
+    .then(function(person) {
+      $scope.user = person.username
       // TODO set on duty message
-      $scope.workingDays = res.data.workingDays
-      $scope.unavailable = res.data.unavailable
+      $scope.workingDays = person.workingDays
+      $scope.unavailable = person.unavailable
     })
 
 
@@ -96,8 +110,8 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($sc
     else {
       // get all the people
       peopleSvc.getPeople()
-        .then(function(res) {
-          var people = res.data
+        .then(function(people) {
+          var people = people
             , notFound = true
             , hero
           // pick a random one
@@ -264,8 +278,8 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($sc
 
   // we should be more efficient in grabbing events
   // would be best to grab per view ex. month
-  $http.get("/events")
-  .then(function(res) {
+  eventSvc.getEvents()
+  .then(function(events) {
     $('#calendar').fullCalendar({
       header: {
         left: 'prev,next today',
@@ -275,7 +289,7 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', function($sc
       defaultDate: new Date(),
       editable: true,
       eventLimit: true, // allow "more" link when too many events
-      events: res.data,
+      events: events,
     
       // toggle availability
       dayClick: function(date, view) {
