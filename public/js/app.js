@@ -70,6 +70,20 @@ supportHero.service('availabilitySvc', function ($http) {
       return res.data
     })
   }
+
+  this.addEventUnavailability = function (attributes) {
+    return $http.patch('/event/add-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.removeEventUnavailability = function (attributes) {
+    return $http.patch('/event/remove-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
 })
 
 
@@ -273,9 +287,9 @@ supportHero.controller('mainCtrl', ['$scope',
         console.log(data)
         $scope.unavailable.push(day)
       })
-      $http.patch("/event/add-unavailability", {username: $scope.user, start: day})
-        .then(function(res){
-        console.log(res.data)
+      availabilitySvc.addEventUnavailability({username: $scope.user, start: day})
+        .then(function(data){
+        console.log(data)
       })
     } else console.log('not valid date')
   }
@@ -289,9 +303,9 @@ supportHero.controller('mainCtrl', ['$scope',
       .then(function(data){
       console.log(data)
     })
-    $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
-      .then(function(res){
-      console.log(res.data)
+    availabilitySvc.removeEventUnavailability({username: $scope.user, start: date})
+      .then(function(data){
+      console.log(data)
     })
   }
 
@@ -329,9 +343,9 @@ supportHero.controller('mainCtrl', ['$scope',
             .then(function(data){
             $scope.unavailable.push(date.format('YYYY-MM-DD'))
           })
-          $http.patch("/event/add-unavailability", {username: $scope.user, start: date})
-            .then(function(res){
-            console.log(res.data)
+          availabilitySvc.addEventUnavailability({username: $scope.user, start: date})
+            .then(function(data){
+            console.log(data)
           })
         // mark day unavailable    
         } else {
@@ -340,9 +354,9 @@ supportHero.controller('mainCtrl', ['$scope',
             .then(function(data){
             $scope.unavailable.splice(date, 1)
           })
-          $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
-            .then(function(res){
-            console.log(res.data)
+          availabilitySvc.removeEventUnavailability({username: $scope.user, start: date})
+            .then(function(data){
+            console.log(data)
           })
         }
       },
