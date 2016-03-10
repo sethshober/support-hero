@@ -1,30 +1,20 @@
-// this is mostly for future use
-
 var gulp           = require('gulp')
   , concat         = require('gulp-concat')
   , nodemon        = require('gulp-nodemon')
-  , mainBowerFiles = require('main-bower-files')
 
 var config = {
-  jsPath: 'public/js/*.js'
+  jsPath: 'public/js/ng/**/*.js',
 }
 
+gulp.task('js', function(){
+  gulp.src(['public/js/ng/module.js', config.jsPath])
+    .pipe(concat('app.js'))
+    .pipe(gulp.dest('public'))
+})
 
-// FIX ME
-// gulp.task('js', function(){
-//     gulp.src(['public/js/ng/controllers/module.js', config.jsPath])
-//         .pipe(concat('app.js'))
-//         .pipe(ngAnnotate())
-//        // .pipe(uglify())
-//         .pipe(gulp.dest('public'));
-// });
-
-// gulp.task('watch:js', ['js'], function(){
-//     gulp.watch(config.jsPath, ['js'])
-// })
-
-// TODO: Add live reload.
-
+gulp.task('watch:js', ['js'], function(){
+  gulp.watch(config.jsPath, ['js'])
+})
 
 gulp.task('dev:server', function(){
     nodemon({
@@ -34,4 +24,8 @@ gulp.task('dev:server', function(){
     })
 })
 
-gulp.task('default',['dev:server'],  function(){})
+gulp.task('default',['watch:js', 'dev:server'], function(){})
+
+
+
+
