@@ -58,6 +58,12 @@ router.delete('/event/:username', function(req, res, next){
 
 // update availability
 router.patch('/event/add-unavailability', function(req, res, next){
+  var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+  if ( !r.test(req.body.start) ) {
+    console.log('bad date format')
+    res.status(400).send("bad date format")
+    return
+  }
   console.log("Updating event availability")
   Event.findOneAndUpdate(
     {start: req.body.start},

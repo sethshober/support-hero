@@ -50,6 +50,12 @@ router.put('/person', function(req, res, next){
 
 // update availability
 router.patch('/person/add-unavailability', function(req, res, next){
+  var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
+  if ( !r.test(req.body.unavailable) ) {
+    console.log('bad date format')
+    res.status(400).send("bad date format")
+    return
+  }
   console.log("Updating User availability " + req.body.username)
   Person.findOneAndUpdate(
     {username: req.body.username},
