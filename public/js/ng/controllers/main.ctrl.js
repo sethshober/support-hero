@@ -1,3 +1,7 @@
+// This is the controller for the app.
+// It's mostly calendar stuff.
+// Unfortunately it's a monolith, still.
+
 supportHero.controller('mainCtrl', ['$scope',  
                                     'peopleSvc', 
                                     'eventSvc', 

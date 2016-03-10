@@ -1,12 +1,5 @@
 'use strict'
 
-/* 
- * Please note that to get this done in the timeline, 
- * with my minimal nG experience, I had to make some hacks.
- * Breaking this out into nested views, using directives and services, etc,
- * would be necessary in taking this forward.
- */
-
 // create the app
 var supportHero = angular.module('supportHero', ['ui.router'])
 
@@ -20,6 +13,10 @@ supportHero.config(function($stateProvider, $urlRouterProvider) {
       controller: 'mainCtrl'
     })
 })
+// This is the controller for the app.
+// It's mostly calendar stuff.
+// Unfortunately it's a monolith, still.
+
 supportHero.controller('mainCtrl', ['$scope',  
                                     'peopleSvc', 
                                     'eventSvc', 
@@ -326,7 +323,17 @@ supportHero.controller('mainCtrl', ['$scope',
   })
 
 }])
+// this service handles adding and removing availability
+// for both people and events
+
 supportHero.service('availabilitySvc', function ($http) {
+  
+  /**
+   * adds unavailable day to person
+   * @param {object} attributes - the user and date
+   * @param attributes.username - the user
+   * @param attributes.unavailable - the date
+   */
   this.addPersonUnavailability = function (attributes) {
     return $http.patch('/person/add-unavailability', attributes)
     .then(function(res){
@@ -334,6 +341,12 @@ supportHero.service('availabilitySvc', function ($http) {
     })
   }
 
+  /**
+   * removes unavailable day from person
+   * @param {object} attributes - the user and date
+   * @param attributes.username - the user
+   * @param attributes.unavailable - the date
+   */
   this.removePersonUnavailability = function (attributes) {
     return $http.patch('/person/remove-unavailability', attributes)
     .then(function(res){
@@ -341,6 +354,12 @@ supportHero.service('availabilitySvc', function ($http) {
     })
   }
 
+  /**
+   * adds unavailable person to event 
+   * @param {object} attributes - the user and date
+   * @param attributes.username - the user
+   * @param attributes.start - the date
+   */
   this.addEventUnavailability = function (attributes) {
     return $http.patch('/event/add-unavailability', attributes)
     .then(function(res){
@@ -348,14 +367,27 @@ supportHero.service('availabilitySvc', function ($http) {
     })
   }
 
+  /**
+   * removes unavailable person from event
+   * @param {object} attributes - the user and date
+   * @param attributes.username - the user
+   * @param attributes.start - the date
+   */
   this.removeEventUnavailability = function (attributes) {
     return $http.patch('/event/remove-unavailability', attributes)
     .then(function(res){
       return res.data
     })
   }
+
 })
+// this service handles getting an event/events
+
 supportHero.service('eventSvc', function ($http) {
+
+  /**
+   * get all the events
+   */
   this.getEvents = function() {
     return $http.get('/events')
     .then(function(res){
@@ -363,6 +395,10 @@ supportHero.service('eventSvc', function ($http) {
     })
   }
 
+  /**
+   * get a single event
+   * @param {string} date - the date you want the event from
+   */
   this.getEvent = function(date) {
     return $http.get('/event/' + date)
     .then(function(res){
@@ -370,7 +406,13 @@ supportHero.service('eventSvc', function ($http) {
     })
   }
 })
+// this service handles getting a person or all people
+
 supportHero.service('peopleSvc', function ($http) {
+
+  /**
+   * get all the people
+   */
   this.getPeople = function() {
     return $http.get('/people')
     .then(function(res){
@@ -378,6 +420,10 @@ supportHero.service('peopleSvc', function ($http) {
     })
   }
 
+  /**
+   * get a single person
+   * @param {string} user - the user you want
+   */
   this.getPerson = function(user) {
     return $http.get('/person/' + user)
     .then(function(res){

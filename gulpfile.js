@@ -1,6 +1,6 @@
-var gulp           = require('gulp')
-  , concat         = require('gulp-concat')
-  , nodemon        = require('gulp-nodemon')
+var gulp    = require('gulp')
+  , concat  = require('gulp-concat')
+  , nodemon = require('gulp-nodemon')
 
 var config = {
   jsPath: 'public/js/ng/**/*.js',
@@ -17,11 +17,11 @@ gulp.task('watch:js', ['js'], function(){
 })
 
 gulp.task('dev:server', function(){
-    nodemon({
-        script: 'bin/www',
-        ect:    'js',
-        ignore: ['ng*', 'gulp*', 'assets*']
-    })
+  nodemon({
+    script: 'bin/www',
+    ect:    'js',
+    ignore: ['ng*', 'gulp*', 'assets*']
+  })
 })
 
 gulp.task('default',['watch:js', 'dev:server'], function(){})
