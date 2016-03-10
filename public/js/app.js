@@ -56,7 +56,33 @@ supportHero.service('eventSvc', function ($http) {
 })
 
 
-supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', function($scope, $http, peopleSvc, eventSvc){
+supportHero.service('availabilitySvc', function ($http) {
+  this.addPersonUnavailability = function (attributes) {
+    return $http.patch('/person/add-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.removePersonUnavailability = function (attributes) {
+    return $http.patch('/person/remove-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+})
+
+
+supportHero.controller('mainCtrl', ['$scope', 
+                                    '$http', 
+                                    'peopleSvc', 
+                                    'eventSvc', 
+                                    'availabilitySvc', 
+                                    function ($scope, 
+                                              $http, 
+                                              peopleSvc, 
+                                              eventSvc, 
+                                              availabilitySvc) {
 
   // TODO: add error handlers
 
@@ -242,9 +268,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', 
   $scope.addUnavailability = function(day) {
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
     if (r.test(day)) {
-      $http.patch("/person/add-unavailability", {username: $scope.user, unavailable: day})
-        .then(function(res){
-        console.log(res.data)
+      availabilitySvc.addPersonUnavailability({username: $scope.user, unavailable: day})
+        .then(function(data){
+        console.log(data)
         $scope.unavailable.push(day)
       })
       $http.patch("/event/add-unavailability", {username: $scope.user, start: day})
@@ -259,9 +285,9 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', 
     // DON'T DO THIS IN REAL LIFE
     var date = evt.path[1].lastChild.data.trim()
     
-    $http.patch("/person/remove-unavailability", {username: $scope.user, unavailable: date})
-      .then(function(res){
-      console.log(res.data)
+    availabilitySvc.removePersonUnavailability({username: $scope.user, unavailable: date})
+      .then(function(data){
+      console.log(data)
     })
     $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
       .then(function(res){
@@ -299,8 +325,8 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', 
         // mark day available
         if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') { // normal
           $(this).css('background-color', '#FFE4E1') // make Misty Rose
-          $http.patch("/person/add-unavailability", {username: $scope.user, unavailable: date})
-            .then(function(res){
+          availabilitySvc.addPersonUnavailability({username: $scope.user, unavailable: date})
+            .then(function(data){
             $scope.unavailable.push(date.format('YYYY-MM-DD'))
           })
           $http.patch("/event/add-unavailability", {username: $scope.user, start: date})
@@ -310,8 +336,8 @@ supportHero.controller('mainCtrl', ["$scope", "$http", 'peopleSvc', 'eventSvc', 
         // mark day unavailable    
         } else {
           $(this).css('background-color', 'rgba(0, 0, 0, 0)')
-          $http.patch("/person/remove-unavailability", {username: $scope.user, unavailable: date})
-            .then(function(res){
+          availabilitySvc.removePersonUnavailability({username: $scope.user, unavailable: date})
+            .then(function(data){
             $scope.unavailable.splice(date, 1)
           })
           $http.patch("/event/remove-unavailability", {username: $scope.user, start: date})
