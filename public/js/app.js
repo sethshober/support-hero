@@ -53,6 +53,13 @@ supportHero.service('eventSvc', function ($http) {
       return res.data
     })
   }
+
+  this.getEvent = function(date) {
+    return $http.get('/event/' + date)
+    .then(function(res){
+      return res.data
+    })
+  }
 })
 
 
@@ -87,13 +94,11 @@ supportHero.service('availabilitySvc', function ($http) {
 })
 
 
-supportHero.controller('mainCtrl', ['$scope', 
-                                    '$http', 
+supportHero.controller('mainCtrl', ['$scope',  
                                     'peopleSvc', 
                                     'eventSvc', 
                                     'availabilitySvc', 
                                     function ($scope, 
-                                              $http, 
                                               peopleSvc, 
                                               eventSvc, 
                                               availabilitySvc) {
@@ -388,9 +393,9 @@ supportHero.controller('mainCtrl', ['$scope',
     renderCal()
     // set current hero
     var d = $('#calendar').fullCalendar('getDate').format('YYYY-MM-DD')
-    $http.get('/event/' + d)
-      .then(function(res) {
-        $scope.currentHero = res.data[0].title
+    eventSvc.getEvent(d)
+      .then(function(evt) {
+        $scope.currentHero = evt[0].title
       })
   })
 }])
