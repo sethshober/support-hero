@@ -8,7 +8,7 @@ var config = {
 
 gulp.task('js', function(){
   gulp.src(['public/js/ng/module.js', config.jsPath])
-    .pipe(concat('app.js'))
+    .pipe(concat('js/app.js'))
     .pipe(gulp.dest('public'))
 })
 

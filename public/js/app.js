@@ -10,90 +10,16 @@
 // create the app
 var supportHero = angular.module('supportHero', ['ui.router'])
 
-
 // set up basic state machine
 supportHero.config(function($stateProvider, $urlRouterProvider) {
   $urlRouterProvider.otherwise('/calendar')
   $stateProvider
-    // home state and nested views
-    // .state('home', {
-    //   url: '/',
-    //   templateUrl: 'partials/partial-home.html'
-    // })
-
     .state('calendar', {
       url: '/calendar',
       templateUrl: 'partials/partial-calendar.html',
       controller: 'mainCtrl'
     })
 })
-
-
-supportHero.service('peopleSvc', function ($http) {
-  this.getPeople = function() {
-    return $http.get('/people')
-    .then(function(res){
-      return res.data
-    })
-  }
-
-  this.getPerson = function(user) {
-    return $http.get('/person/' + user)
-    .then(function(res){
-      return res.data
-    })
-  }
-})
-
-
-supportHero.service('eventSvc', function ($http) {
-  this.getEvents = function() {
-    return $http.get('/events')
-    .then(function(res){
-      return res.data
-    })
-  }
-
-  this.getEvent = function(date) {
-    return $http.get('/event/' + date)
-    .then(function(res){
-      return res.data
-    })
-  }
-})
-
-
-supportHero.service('availabilitySvc', function ($http) {
-  this.addPersonUnavailability = function (attributes) {
-    return $http.patch('/person/add-unavailability', attributes)
-    .then(function(res){
-      return res.data
-    })
-  }
-
-  this.removePersonUnavailability = function (attributes) {
-    return $http.patch('/person/remove-unavailability', attributes)
-    .then(function(res){
-      return res.data
-    })
-  }
-
-  this.addEventUnavailability = function (attributes) {
-    return $http.patch('/event/add-unavailability', attributes)
-    .then(function(res){
-      return res.data
-    })
-  }
-
-  this.removeEventUnavailability = function (attributes) {
-    return $http.patch('/event/remove-unavailability', attributes)
-    .then(function(res){
-      return res.data
-    })
-  }
-})
-
-
 supportHero.controller('mainCtrl', ['$scope',  
                                     'peopleSvc', 
                                     'eventSvc', 
@@ -398,4 +324,64 @@ supportHero.controller('mainCtrl', ['$scope',
         $scope.currentHero = evt[0].title
       })
   })
+
 }])
+supportHero.service('availabilitySvc', function ($http) {
+  this.addPersonUnavailability = function (attributes) {
+    return $http.patch('/person/add-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.removePersonUnavailability = function (attributes) {
+    return $http.patch('/person/remove-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.addEventUnavailability = function (attributes) {
+    return $http.patch('/event/add-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.removeEventUnavailability = function (attributes) {
+    return $http.patch('/event/remove-unavailability', attributes)
+    .then(function(res){
+      return res.data
+    })
+  }
+})
+supportHero.service('eventSvc', function ($http) {
+  this.getEvents = function() {
+    return $http.get('/events')
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.getEvent = function(date) {
+    return $http.get('/event/' + date)
+    .then(function(res){
+      return res.data
+    })
+  }
+})
+supportHero.service('peopleSvc', function ($http) {
+  this.getPeople = function() {
+    return $http.get('/people')
+    .then(function(res){
+      return res.data
+    })
+  }
+
+  this.getPerson = function(user) {
+    return $http.get('/person/' + user)
+    .then(function(res){
+      return res.data
+    })
+  }
+})
