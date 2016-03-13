@@ -13,7 +13,6 @@ supportHero.controller('mainCtrl', ['$scope',
 
   // TODO: add error handlers
 
-  $scope.heroDate
 
   // update calendar events
   function renderCal() {
@@ -64,8 +63,7 @@ supportHero.controller('mainCtrl', ['$scope',
       // get all the people
       peopleSvc.getPeople()
         .then(function(people) {
-          var people = people
-            , notFound = true
+          var notFound = true
             , hero
           // pick a random one
           while (notFound) {

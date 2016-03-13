@@ -4,11 +4,6 @@ var gulp    = require('gulp')
   , nodemon = require('gulp-nodemon')
   , babel   = require("gulp-babel")
 
-//var packageJSON  = require('./package');
-//var jshintConfig = packageJSON.jshintConfig;
-
-//jshintConfig.lookup = false;
-
 var config = {
   jsPath: 'public/js/ng/**/*.js',
 }
