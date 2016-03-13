@@ -1,6 +1,7 @@
 var gulp    = require('gulp')
   , concat  = require('gulp-concat')
   , nodemon = require('gulp-nodemon')
+  , babel   = require("gulp-babel")
 
 var config = {
   jsPath: 'public/js/ng/**/*.js',
@@ -8,6 +9,7 @@ var config = {
 
 gulp.task('js', function(){
   gulp.src(['public/js/ng/module.js', config.jsPath])
+    .pipe(babel())
     .pipe(concat('js/app.js'))
     .pipe(gulp.dest('public'))
 })
