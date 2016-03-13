@@ -6,11 +6,18 @@ To Install:
 ```
 npm install
 ```
-To Run:
+Run a dev server that watches for changes and runs the build process.
 ```
-gulp
+npm run dev
 ```
-
+Run just the build.
+```
+npm run build
+```
+Run production server with prebuilt assets.
+```
+npm run serve
+```
 This web-based application stores and displays the on-duty schedule for a team. It is a Node/Express app, serving an Angular frontend. The datastore is MongoDB. This represents an MVP to the following guidelines. It is not quite feature complete, and the UI/UX is minimal, but provides a clear starting point and understanding. Not everything has been done the "Angular" way, but I'm working on it. Please, see this for what it is, a fun experiment and proof of concept. Enjoy!
 
 ## Features
