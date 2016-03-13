@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "gulp",
     "build": "gulp js",
-    "serve": "node ./bin/www",
+    "prod": "node ./bin/www",
     "test": "node_modules/.bin/mocha -w"
   },
   "dependencies": {
