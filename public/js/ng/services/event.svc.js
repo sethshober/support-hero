@@ -36,4 +36,15 @@ supportHero.service('eventSvc', function ($http) {
     })
   }
 
+  /**
+   * delete an event
+   * @param {string} date - date of event
+   */
+  this.removeEvent = function(date) {
+    return $http.delete('/event/' + date)
+    .then(function(res){
+      return res.data
+    })
+  }
+
 })

@@ -114,29 +114,25 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
           } else console.log('no match going again');
         }
       }).then(function () {
-        // create calendar event
+        // create UI calendar event
         $('#calendar').fullCalendar('renderEvent', {
           title: $scope.generatedHero,
           start: date
         });
-        // TODO
         // check for event
         eventSvc.getEvent(date).then(function (evt) {
+          var e = { event: { title: $scope.generatedHero, start: date } };
           if (!evt[0]) {
             // no events for day
             // create the event
-            var evt = { event: { title: $scope.generatedHero, start: date } };
-            eventSvc.createEvent(evt);
+            eventSvc.createEvent(e);
           } else {
             // TODO: add ask for swap
-            // delete current event
-
-            // add new one
+            eventSvc.removeEvent(date);
+            eventSvc.createEvent(e);
+            // TODO: remove event from UI
           }
         });
-        // post to API
-        // check if current event via date
-        // remove/replace/swap
       });
     }
   };
@@ -167,7 +163,7 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
     });
   };
 
-  // remove list item (unavailable)
+  // remove list item
   $scope.remove = function (array, index) {
     array.splice(index, 1);
   };
@@ -336,6 +332,16 @@ supportHero.service('eventSvc', function ($http) {
    */
   this.createEvent = function (attributes) {
     return $http.post('/event', attributes).then(function (res) {
+      return res.data;
+    });
+  };
+
+  /**
+   * delete an event
+   * @param {string} date - date of event
+   */
+  this.removeEvent = function (date) {
+    return $http.delete('/event/' + date).then(function (res) {
       return res.data;
     });
   };

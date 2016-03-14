@@ -46,9 +46,9 @@ router.post('/event', function(req, res, next) {
 
 
 // delete event
-router.delete('/event/:username', function(req, res, next){
-  console.log("Deleting User " + req.params.username)
-  Person.remove({username: req.params.username}, function(res, err) {
+router.delete('/event/:date', function(req, res, next){
+  console.log("Deleting Event " + req.params.date)
+  Event.remove({start: req.params.date}, function(res, err) {
     if (err) return next(err)
     console.log('successful delete')
     res.sendStatus(201)
