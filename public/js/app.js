@@ -331,7 +331,7 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
     // set current hero
     var d = $('#calendar').fullCalendar('getDate').format('YYYY-MM-DD');
     eventSvc.getEvent(d).then(function (evt) {
-      $scope.currentHero = evt[0].title;
+      if (evt[0].title === $scope.user) $scope.currentHero = "You";else $scope.currentHero = evt[0].title;
     });
   });
 }]);
