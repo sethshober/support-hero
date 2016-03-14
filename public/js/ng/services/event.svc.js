@@ -4,6 +4,7 @@ supportHero.service('eventSvc', function ($http) {
 
   /**
    * get all the events
+   * @returns {array} the events
    */
   this.getEvents = function() {
     return $http.get('/events')
@@ -15,6 +16,7 @@ supportHero.service('eventSvc', function ($http) {
   /**
    * get a single event
    * @param {string} date - the date you want the event from
+   * @returns {object} the event
    */
   this.getEvent = function(date) {
     return $http.get('/event/' + date)

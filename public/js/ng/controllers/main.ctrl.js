@@ -19,6 +19,7 @@ supportHero.controller('mainCtrl', ['$scope',
     $('#calendar').fullCalendar('rerenderEvents')
   }
 
+
   // change event color for days user is on duty
   function colorOnDutyDays(events) {
     for(let evt of events) {
@@ -27,6 +28,7 @@ supportHero.controller('mainCtrl', ['$scope',
       }
     }
   }
+
 
   // list on duty days in sidebar
   function listOnDutyDays(events) {
@@ -40,11 +42,9 @@ supportHero.controller('mainCtrl', ['$scope',
 
 
   // find an available hero given a date
+  // FIXME: if everyone is unavailable will loop infinitely
   $scope.generateHero = function(date) {
-    console.log('generating hero')
-    console.log(date)
-    // date placeholder to test
-    // var date = '2016-02-10'
+    console.log('generating hero for ' + date)
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}')
     if (!r.test(date)) return
     else {
@@ -53,16 +53,15 @@ supportHero.controller('mainCtrl', ['$scope',
         .then(function(people) {
           var notFound = true
             , hero
+            , person
           // pick a random one
           while (notFound) {
-            var person = Math.floor(Math.random() * people.length)
-            console.log(person)
+            person = Math.floor(Math.random() * people.length)
             if (people[person].unavailable.indexOf(date) === -1) { // person IS available
               notFound = false
               hero = people[person].username
               $scope.generatedHero = people[person].username
-              console.log(people[person].username)
-            } else console.log('no match going again')
+            }
           }
       }).then(function() {
           // create UI calendar event
@@ -80,6 +79,7 @@ supportHero.controller('mainCtrl', ['$scope',
               eventSvc.createEvent(e)
             } else {
               // TODO: add ask for swap
+              // maybe this should just patch the event instead
               eventSvc.removeEvent(date)
               eventSvc.createEvent(e)
               // TODO: remove event from UI
@@ -129,8 +129,8 @@ supportHero.controller('mainCtrl', ['$scope',
 
 
   // get our default user Sherry
-  // this should probably be a service
-  // and in reality user session token would be passed in header
+  // update user settings
+  // TODO: make this work with session token
   peopleSvc.getPerson('Sherry')
     .then(function(person) {
       $scope.user = person.username
@@ -156,9 +156,6 @@ supportHero.controller('mainCtrl', ['$scope',
     
       // toggle availability
       dayClick: function(date, view) {
-        // alert('Clicked on: ' + date.format())
-        // alert('Current view: ' + view.name)
-        
         // mark day available
         if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') { // normal
           $(this).css('background-color', '#FFE4E1') // make Misty Rose
@@ -191,7 +188,7 @@ supportHero.controller('mainCtrl', ['$scope',
 
       // do something on each day
       // in this case color unavailable days
-      // there is an inconsistent bug here on load
+      // there is an inconsistent bug here on load: "indexOf of undefined"
       dayRender: function (date, cell) {
         date = moment(date).format('YYYY-MM-DD')
         if ($scope.unavailable.indexOf(date) != -1) {
@@ -214,4 +211,4 @@ supportHero.controller('mainCtrl', ['$scope',
       })
   })
 
-}])
+}]) // end controller

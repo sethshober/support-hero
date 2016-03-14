@@ -90,28 +90,25 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
   }
 
   // find an available hero given a date
+  // FIXME: if everyone is unavailable will loop infinitely
   $scope.generateHero = function (date) {
-    console.log('generating hero');
-    console.log(date);
-    // date placeholder to test
-    // var date = '2016-02-10'
+    console.log('generating hero for ' + date);
     var r = new RegExp('[0-9]{4}-[0-9]{2}-[0-9]{2}');
     if (!r.test(date)) return;else {
       // get all the people
       peopleSvc.getPeople().then(function (people) {
         var notFound = true,
-            hero;
+            hero,
+            person;
         // pick a random one
         while (notFound) {
-          var person = Math.floor(Math.random() * people.length);
-          console.log(person);
+          person = Math.floor(Math.random() * people.length);
           if (people[person].unavailable.indexOf(date) === -1) {
             // person IS available
             notFound = false;
             hero = people[person].username;
             $scope.generatedHero = people[person].username;
-            console.log(people[person].username);
-          } else console.log('no match going again');
+          }
         }
       }).then(function () {
         // create UI calendar event
@@ -128,6 +125,7 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
             eventSvc.createEvent(e);
           } else {
             // TODO: add ask for swap
+            // maybe this should just patch the event instead
             eventSvc.removeEvent(date);
             eventSvc.createEvent(e);
             // TODO: remove event from UI
@@ -169,8 +167,8 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
   };
 
   // get our default user Sherry
-  // this should probably be a service
-  // and in reality user session token would be passed in header
+  // update user settings
+  // TODO: make this work with session token
   peopleSvc.getPerson('Sherry').then(function (person) {
     $scope.user = person.username;
     $scope.workingDays = person.workingDays;
@@ -193,9 +191,6 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
 
       // toggle availability
       dayClick: function dayClick(date, view) {
-        // alert('Clicked on: ' + date.format())
-        // alert('Current view: ' + view.name)
-
         // mark day available
         if ($(this).css('background-color') === 'rgba(0, 0, 0, 0)') {
           // normal
@@ -224,7 +219,7 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
 
       // do something on each day
       // in this case color unavailable days
-      // there is an inconsistent bug here on load
+      // there is an inconsistent bug here on load: "indexOf of undefined"
       dayRender: function dayRender(date, cell) {
         date = moment(date).format('YYYY-MM-DD');
         if ($scope.unavailable.indexOf(date) != -1) {
@@ -243,7 +238,7 @@ supportHero.controller('mainCtrl', ['$scope', 'peopleSvc', 'eventSvc', 'availabi
       if (evt[0].title === $scope.user) $scope.currentHero = "You";else $scope.currentHero = evt[0].title;
     });
   });
-}]);
+}]); // end controller
 'use strict';
 
 // this service handles adding and removing availability
@@ -307,6 +302,7 @@ supportHero.service('eventSvc', function ($http) {
 
   /**
    * get all the events
+   * @returns {array} the events
    */
   this.getEvents = function () {
     return $http.get('/events').then(function (res) {
@@ -317,6 +313,7 @@ supportHero.service('eventSvc', function ($http) {
   /**
    * get a single event
    * @param {string} date - the date you want the event from
+   * @returns {object} the event
    */
   this.getEvent = function (date) {
     return $http.get('/event/' + date).then(function (res) {
@@ -354,6 +351,7 @@ supportHero.service('peopleSvc', function ($http) {
 
   /**
    * get all the people
+   * @returns {array} the people
    */
   this.getPeople = function () {
     return $http.get('/people').then(function (res) {
@@ -364,6 +362,7 @@ supportHero.service('peopleSvc', function ($http) {
   /**
    * get a single person
    * @param {string} user - the user you want
+   * @returns {object} the person
    */
   this.getPerson = function (user) {
     return $http.get('/person/' + user).then(function (res) {

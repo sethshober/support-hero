@@ -18,7 +18,7 @@ Run production server with prebuilt assets.
 ```
 npm run prod
 ```
-This web-based application stores and displays the on-duty schedule for a team. It is a Node/Express app, serving an Angular frontend. The datastore is MongoDB. This represents an MVP to the following guidelines. It is not quite feature complete, and the UI/UX is minimal, but provides a clear starting point and understanding. Not everything has been done the "Angular" way, but I'm working on it. Please, see this for what it is, a fun experiment and proof of concept. Enjoy!
+This web-based application stores and displays the on-duty schedule for a team. It is a Node/Express app, serving an Angular frontend. The datastore is MongoDB. This represents an MVP to the following guidelines, and provides a clear starting point and understanding. The UI/UX is minimal, and not everything has been done the "Angular" way, but I'm working on it. This is merely a proof of concept with lots of room for improvement.
 
 ## Features
 
