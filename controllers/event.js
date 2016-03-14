@@ -35,7 +35,7 @@ router.get('/event/:date', function(req, res, next) {
 
 // create event
 router.post('/event', function(req, res, next) {
-  console.log(req.body.event)
+  console.log("creating event " + req.body.event)
   var event = new Event(req.body.event)
   event.save(function(err, event){
     if (err) return next(err)
